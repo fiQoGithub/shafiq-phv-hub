@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PHV Take-Home Tracker by Shafiq PHV</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#eef2f6;--surface:#fff;--ink:#14233b;--muted:#5b6b82;--line:#d5dde7;--amber:#f2a900;--amber-ink:#14233b;--pos:#1a7f52;--neg:#c0392b;--meter:#14233b;--meter-ink:#ffd25e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a2c;--surface:#16263d;--ink:#e8eef6;--muted:#93a3ba;--line:#2a3d58;--pos:#4cc58a;--neg:#ff7a68;--meter:#07111f;--meter-ink:#ffd25e}}
+:root[data-theme="dark"]{--bg:#0e1a2c;--surface:#16263d;--ink:#e8eef6;--muted:#93a3ba;--line:#2a3d58;--pos:#4cc58a;--neg:#ff7a68;--meter:#07111f;--meter-ink:#ffd25e}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:560px;margin:0 auto;padding:16px 16px 40px}
+h1{font:700 28px/1.1 "Barlow Condensed","Arial Narrow",sans-serif;margin:4px 0 2px}
+.sub{color:var(--muted);margin:0 0 14px;font-size:15px}
+.tabs{display:flex;gap:6px;margin-bottom:14px}
+.tabs button{flex:1;padding:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 15px Barlow,sans-serif;border-radius:8px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--amber);border-color:var(--amber);color:var(--amber-ink)}
+.meter{background:var(--meter);color:var(--meter-ink);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.meter .big{font:700 64px/1 "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.5px}
+.meter .lbl{font-size:14px;color:#c9d4e4}
+.meter .row{display:flex;gap:22px;margin-top:12px;flex-wrap:wrap}
+.meter .row b{display:block;font:700 24px/1.1 "Barlow Condensed",sans-serif;color:#fff}
+.meter .row span{font-size:13px;color:#c9d4e4}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+.card h2{font:700 20px/1.2 "Barlow Condensed",sans-serif;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;font-size:14px;color:var(--muted)}
+input{width:100%;margin-top:3px;padding:10px;font:500 17px Barlow,sans-serif;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.btn{width:100%;margin-top:12px;padding:13px;border:0;border-radius:8px;background:var(--amber);color:var(--amber-ink);font:700 17px Barlow,sans-serif;cursor:pointer}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);margin-top:8px}
+.entry{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:15px}
+.entry:first-of-type{border-top:0}
+.entry small{color:var(--muted);display:block}
+.pos{color:var(--pos);font-weight:600}.neg{color:var(--neg);font-weight:600}
+.del{background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer;padding:4px 8px}
+.empty{color:var(--muted);margin:0}
+.note{font-size:13px;color:var(--muted);margin-top:10px}
+.verdict{font-weight:600;margin:8px 0 0}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:no-preference){.meter .big{transition:color .2s}}
+</style>
+</head>
+<body>
+<main>
+  <h1>PHV Take-Home Tracker</h1>
+  <p class="sub">Find out what you really keep after rental, fuel and costs. Free tool built by <a href="https://www.tiktok.com/@shafiq.phv" target="_blank" rel="noopener" style="color:inherit;font-weight:600">Shafiq (@shafiq.phv)</a>.</p>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" id="t1" aria-selected="true">My days</button>
+    <button role="tab" id="t2" aria-selected="false">Rental check</button>
+  </div>
+
+  <section id="p1">
+    <div class="meter" aria-live="polite">
+      <div class="lbl">Last 7 days, take-home per hour</div>
+      <div class="big" id="wkHr">$0.00</div>
+      <div class="row">
+        <div><b id="wkNet">$0</b><span>net earned</span></div>
+        <div><b id="wkHrs">0</b><span>hours</span></div>
+        <div><b id="wkKm">–</b><span>cost per km</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Log a day</h2>
+      <div class="grid">
+        <label>Date<input type="date" id="d"></label>
+        <label>Hours driven<input type="number" id="h" inputmode="decimal" min="0" step="0.5"></label>
+        <label>Gross earnings ($)<input type="number" id="g" inputmode="decimal" min="0" step="0.01"></label>
+        <label>Distance (km)<input type="number" id="k" inputmode="decimal" min="0"></label>
+        <label>Rental or car cost ($)<input type="number" id="r" inputmode="decimal" min="0" step="0.01"></label>
+        <label>Fuel or charging ($)<input type="number" id="f" inputmode="decimal" min="0" step="0.01"></label>
+        <label>ERP and parking ($)<input type="number" id="e" inputmode="decimal" min="0" step="0.01"></label>
+        <label>Other costs ($)<input type="number" id="o" inputmode="decimal" min="0" step="0.01"></label>
+        <label>Platform fee ($)<input type="number" id="pf" inputmode="decimal" min="0" step="0.01"></label>
+      </div>
+      <button class="btn" id="save">Save this day</button>
+      <p class="note" id="msg"></p>
+    </div>
+
+    <div class="card">
+      <h2>Recent days</h2>
+      <div id="list"><p class="empty">No days saved yet. Log your first day above.</p></div>
+      <p class="note">Your entries stay on this phone. Clearing your browser data removes them.</p>
+    </div>
+  </section>
+
+  <section id="p2" hidden>
+    <div class="card">
+      <h2>Is this rental worth it?</h2>
+      <div class="grid">
+        <label>Rental per day ($)<input type="number" id="cr" inputmode="decimal" min="0" value="100"></label>
+        <label>Gross per day ($)<input type="number" id="cg" inputmode="decimal" min="0" value="220"></label>
+        <label>Hours per day<input type="number" id="ch" inputmode="decimal" min="1" value="10"></label>
+        <label>Fuel or charging per day ($)<input type="number" id="cf" inputmode="decimal" min="0" value="40"></label>
+        <label>Other costs per day ($)<input type="number" id="co" inputmode="decimal" min="0" value="15"></label>
+        <label>Days per week<input type="number" id="cd" inputmode="decimal" min="1" max="7" value="6"></label>
+        <label>Target take-home per hour ($)<input type="number" id="ct" inputmode="decimal" min="0" value="15"></label>
+        <label>Platform commission (%)<input type="number" id="cc" inputmode="decimal" min="0" max="99" value="0"></label>
+      </div>
+    </div>
+    <div class="meter" aria-live="polite">
+      <div class="lbl">Take-home per hour</div>
+      <div class="big" id="cHr">$0.00</div>
+      <div class="row">
+        <div><b id="cDay">$0</b><span>per day</span></div>
+        <div><b id="cWk">$0</b><span>per week</span></div>
+        <div><b id="cBe">$0</b><span>gross needed per day</span></div>
+      </div>
+    </div>
+    <p class="verdict" id="verdict"></p>
+    <p class="note">Gross needed per day is what you must earn to hit your target per hour after costs. Try different rental rates or an EV’s charging cost to compare.</p>
+  </section>
+
+  <div class="card" style="margin-top:18px">
+    <h2>Join the PHV AI community</h2>
+    <p class="empty">Free tools and AI tips for PHV drivers, from Shafiq and Joel. Tell us what you’d like next.</p>
+    <a class="btn" id="join" hidden style="display:block;text-align:center;text-decoration:none" target="_blank" rel="noopener">Join the PHV AI community on WhatsApp</a>
+    <a class="btn ghost" style="display:block;text-align:center;text-decoration:none" href="https://www.tiktok.com/@shafiq.phv" target="_blank" rel="noopener">Follow @shafiq.phv on TikTok</a>
+    <a class="btn ghost" style="display:block;text-align:center;text-decoration:none" href="https://www.tiktok.com/@joelng.ai" target="_blank" rel="noopener">Follow @joelng.ai on TikTok</a>
+    <button class="btn ghost" id="share">Share with a driver friend</button>
+  </div>
+</main>
+
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var KEY="phv-days-v1", days=[];
+  try{days=JSON.parse(localStorage.getItem(KEY)||"[]");if(!Array.isArray(days))days=[]}catch(e){days=[]}
+  function persist(){try{localStorage.setItem(KEY,JSON.stringify(days))}catch(e){}}
+  function n(id){var v=parseFloat($(id).value);return isFinite(v)&&v>0?v:0}
+  function money(x,d){var s=Math.abs(x).toFixed(d==null?2:d);return(x<0?"-$":"$")+s}
+  function cost(x){return x.r+x.f+x.e+x.o+(x.pf||0)}
+  function today(){var t=new Date();return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0")}
+  $("d").value=today();
+
+  function render(){
+    days.sort(function(a,b){return a.d<b.d?1:-1});
+    var cutoff=new Date();cutoff.setDate(cutoff.getDate()-6);
+    var cs=cutoff.getFullYear()+"-"+String(cutoff.getMonth()+1).padStart(2,"0")+"-"+String(cutoff.getDate()).padStart(2,"0");
+    var w=days.filter(function(x){return x.d>=cs&&x.d<=today()});
+    var net=0,hrs=0,km=0,c=0;
+    w.forEach(function(x){net+=x.g-cost(x);hrs+=x.h;km+=x.k;c+=cost(x)});
+    $("wkHr").textContent=hrs?money(net/hrs):"$0.00";
+    $("wkNet").textContent=money(net,0);
+    $("wkHrs").textContent=hrs.toFixed(hrs%1?1:0);
+    $("wkKm").textContent=km?money(c/km):"–";
+    var L=$("list");
+    if(!days.length){L.innerHTML='<p class="empty">No days saved yet. Log your first day above.</p>';return}
+    L.innerHTML="";
+    days.slice(0,14).forEach(function(x){
+      var nt=x.g-cost(x),row=document.createElement("div");row.className="entry";
+      var left=document.createElement("div");
+      left.innerHTML="<strong></strong><small></small>";
+      left.firstChild.textContent=x.d;
+      left.lastChild.textContent=x.h?money(nt/x.h)+"/hr over "+x.h+" h":"Hours not entered";
+      var right=document.createElement("div");right.style.display="flex";right.style.alignItems="center";
+      var amt=document.createElement("span");amt.className=nt>=0?"pos":"neg";amt.textContent=money(nt);
+      var del=document.createElement("button");del.className="del";del.type="button";del.setAttribute("aria-label","Delete "+x.d);del.textContent="×";
+      del.onclick=function(){days=days.filter(function(y){return y.id!==x.id});persist();render()};
+      right.appendChild(amt);right.appendChild(del);row.appendChild(left);row.appendChild(right);L.appendChild(row);
+    });
+  }
+
+  $("save").onclick=function(){
+    var g=n("g"),h=n("h");
+    if(!g||!h){$("msg").textContent="Enter your gross earnings and hours driven to save.";return}
+    days.push({id:Date.now(),d:$("d").value||today(),g:g,h:h,k:n("k"),r:n("r"),f:n("f"),e:n("e"),o:n("o"),pf:n("pf")});
+    persist();
+    ["g","h","k","f","e","o","pf"].forEach(function(i){$(i).value=""});
+    $("msg").textContent="Saved. Rental stays filled in for your next day.";
+    render();
+  };
+
+  function calc(){
+    var r=n("cr"),g=n("cg"),h=n("ch")||1,f=n("cf"),o=n("co"),dd=n("cd"),t=n("ct"),cc=Math.min(n("cc"),99)/100;
+    var day=g*(1-cc)-r-f-o,hr=day/h,be=(r+f+o+t*h)/(1-cc);
+    $("cHr").textContent=money(hr);
+    $("cDay").textContent=money(day,0);
+    $("cWk").textContent=money(day*dd,0);
+    $("cBe").textContent=money(be,0);
+    var v=$("verdict");
+    if(hr>=t&&t>0){v.textContent="At these numbers you meet your target of "+money(t,0)+"/hr."}
+    else{v.textContent="You’re "+money(Math.max(t-hr,0))+"/hr short of your target. You’d need about "+money(be-g,0)+" more gross per day, or lower costs."}
+  }
+  ["cr","cg","ch","cf","co","cd","ct","cc"].forEach(function(i){$(i).addEventListener("input",calc)});
+
+  function tab(a){
+    $("p1").hidden=a!==1;$("p2").hidden=a!==2;
+    $("t1").setAttribute("aria-selected",a===1);$("t2").setAttribute("aria-selected",a===2);
+  }
+  $("t1").onclick=function(){tab(1)};$("t2").onclick=function(){tab(2)};
+
+  $("share").onclick=function(){
+    var data={title:"PHV Take-Home Tracker",text:"Free tool to see what you really take home after rental and fuel, by @shafiq.phv",url:location.href};
+    if(navigator.share){navigator.share(data).catch(function(){})}
+    else{try{navigator.clipboard.writeText(location.href);$("share").textContent="Link copied"}catch(e){}}
+  };
+
+  var JOIN_URL="https://chat.whatsapp.com/HtNkeVniXX9Cu1RyUlXjbT";
+  if(JOIN_URL){$("join").href=JOIN_URL;$("join").hidden=false}
+  render();calc();
+})();
+</script>
+</body>
+</html>
