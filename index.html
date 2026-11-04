@@ -8,8 +8,8 @@
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 --bg:#eef2f6;--surface:#fff;--ink:#14233b;--muted:#5b6b82;--line:#d5dde7;--amber:#f2a900;--amber-ink:#14233b;--pos:#1a7f52;--neg:#c0392b;--meter:#14233b;--meter-ink:#ffd25e}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a2c;--surface:#16263d;--ink:#e8eef6;--muted:#93a3ba;--line:#2a3d58;--pos:#4cc58a;--neg:#ff7a68;--meter:#07111f;--meter-ink:#ffd25e}}
-:root[data-theme="dark"]{--bg:#0e1a2c;--surface:#16263d;--ink:#e8eef6;--muted:#93a3ba;--line:#2a3d58;--pos:#4cc58a;--neg:#ff7a68;--meter:#07111f;--meter-ink:#ffd25e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a2c;--surface:#16263d;--ink:#e8eef6;--muted:#93a3ba;--line:#2a3d58;--pos:#4cc58a;--neg:#ff7a68;--meter:#07111f}}
+:root[data-theme="dark"]{--bg:#0e1a2c;--surface:#16263d;--ink:#e8eef6;--muted:#93a3ba;--line:#2a3d58;--pos:#4cc58a;--neg:#ff7a68;--meter:#07111f}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -28,9 +28,10 @@ h1{font:700 28px/1.1 "Barlow Condensed","Arial Narrow",sans-serif;margin:4px 0 2
 .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
 .card h2{font:700 20px/1.2 "Barlow Condensed",sans-serif;margin:0 0 10px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:6px}
 label{display:block;font-size:14px;color:var(--muted)}
-input{width:100%;margin-top:3px;padding:10px;font:500 17px Barlow,sans-serif;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
-input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+input,select{width:100%;margin-top:3px;padding:10px;font:500 17px Barlow,sans-serif;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
 .btn{width:100%;margin-top:12px;padding:13px;border:0;border-radius:8px;background:var(--amber);color:var(--amber-ink);font:700 17px Barlow,sans-serif;cursor:pointer}
 .ghost{background:transparent;border:1px solid var(--line);color:var(--ink);margin-top:8px}
 .entry{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:15px}
@@ -41,67 +42,35 @@ input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(-
 .empty{color:var(--muted);margin:0}
 .note{font-size:13px;color:var(--muted);margin-top:10px}
 .verdict{font-weight:600;margin:8px 0 0}
+.sec{font:600 14px Barlow,sans-serif;color:var(--muted);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.04em}
 [hidden]{display:none!important}
-@media (prefers-reduced-motion:no-preference){.meter .big{transition:color .2s}}
 </style>
 </head>
 <body>
 <main>
   <h1>PHV Take-Home Tracker</h1>
-  <p class="sub">Find out what you really keep after rental, fuel and costs. Free tool built by <a href="https://www.tiktok.com/@shafiq.phv" target="_blank" rel="noopener" style="color:inherit;font-weight:600">Shafiq (@shafiq.phv)</a>.</p>
+  <p class="sub">Find out what you really keep after rental, fuel, fees and costs. Free tool built for the PHV (AI Adoption) community by <a href="https://www.tiktok.com/@shafiq.phv" target="_blank" rel="noopener" style="color:inherit;font-weight:600">Shafiq (@shafiq.phv)</a>.</p>
+  <p class="sub"><a id="tj" hidden target="_blank" rel="noopener" style="color:var(--ink);font-weight:600">Join the community on WhatsApp →</a></p>
 
   <div class="tabs" role="tablist">
-    <button role="tab" id="t1" aria-selected="true">My days</button>
-    <button role="tab" id="t2" aria-selected="false">Rental check</button>
+    <button role="tab" id="t1" aria-selected="true">Day check</button>
+    <button role="tab" id="t2" aria-selected="false">My days</button>
   </div>
 
   <section id="p1">
-    <div class="meter" aria-live="polite">
-      <div class="lbl">Last 7 days, take-home per hour</div>
-      <div class="big" id="wkHr">$0.00</div>
-      <div class="row">
-        <div><b id="wkNet">$0</b><span>net earned</span></div>
-        <div><b id="wkHrs">0</b><span>hours</span></div>
-        <div><b id="wkKm">–</b><span>cost per km</span></div>
-      </div>
-    </div>
-
     <div class="card">
-      <h2>Log a day</h2>
-      <div class="grid">
-        <label>Date<input type="date" id="d"></label>
-        <label>Hours driven<input type="number" id="h" inputmode="decimal" min="0" step="0.5"></label>
-        <label>Gross earnings ($)<input type="number" id="g" inputmode="decimal" min="0" step="0.01"></label>
-        <label>Distance (km)<input type="number" id="k" inputmode="decimal" min="0"></label>
-        <label>Rental or car cost ($)<input type="number" id="r" inputmode="decimal" min="0" step="0.01"></label>
-        <label>Fuel or charging ($)<input type="number" id="f" inputmode="decimal" min="0" step="0.01"></label>
-        <label>ERP and parking ($)<input type="number" id="e" inputmode="decimal" min="0" step="0.01"></label>
-        <label>Other costs ($)<input type="number" id="o" inputmode="decimal" min="0" step="0.01"></label>
-        <label>Platform fee ($)<input type="number" id="pf" inputmode="decimal" min="0" step="0.01"></label>
-      </div>
-      <button class="btn" id="save">Save this day</button>
-      <p class="note" id="msg"></p>
-    </div>
-
-    <div class="card">
-      <h2>Recent days</h2>
-      <div id="list"><p class="empty">No days saved yet. Log your first day above.</p></div>
-      <p class="note">Your entries stay on this phone. Clearing your browser data removes them.</p>
-    </div>
-  </section>
-
-  <section id="p2" hidden>
-    <div class="card">
-      <h2>Is this rental worth it?</h2>
+      <h2>Check or plan a day</h2>
+      <p class="empty" style="margin-bottom:10px">Try a rental, a platform or an EV before you commit, or enter a day you just finished.</p>
       <div class="grid">
         <label>Rental per day ($)<input type="number" id="cr" inputmode="decimal" min="0" value="100"></label>
-        <label>Gross per day ($)<input type="number" id="cg" inputmode="decimal" min="0" value="220"></label>
+        <label>Gross fares per day ($)<input type="number" id="cg" inputmode="decimal" min="0" value="220"></label>
         <label>Hours per day<input type="number" id="ch" inputmode="decimal" min="1" value="10"></label>
+        <label>Platform commission (%)<input type="number" id="cc" inputmode="decimal" min="0" max="99" value="0"></label>
         <label>Fuel or charging per day ($)<input type="number" id="cf" inputmode="decimal" min="0" value="40"></label>
         <label>Other costs per day ($)<input type="number" id="co" inputmode="decimal" min="0" value="15"></label>
         <label>Days per week<input type="number" id="cd" inputmode="decimal" min="1" max="7" value="6"></label>
-        <label>Target take-home per hour ($)<input type="number" id="ct" inputmode="decimal" min="0" value="15"></label>
-        <label>Platform commission (%)<input type="number" id="cc" inputmode="decimal" min="0" max="99" value="0"></label>
+        <label>Target per hour ($)<input type="number" id="ct" inputmode="decimal" min="0" value="15"></label>
+        <label>Target per day ($)<input type="number" id="ctd" inputmode="decimal" min="0" value="150"></label>
       </div>
     </div>
     <div class="meter" aria-live="polite">
@@ -114,7 +83,48 @@ input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(-
       </div>
     </div>
     <p class="verdict" id="verdict"></p>
-    <p class="note">Gross needed per day is what you must earn to hit your target per hour after costs. Try different rental rates or an EV’s charging cost to compare.</p>
+    <button class="btn ghost" id="csave">Save this as a day in My days</button>
+    <p class="note" id="cmsg">Gross needed per day covers both your hourly and daily targets, after commission. Saving uses today’s date.</p>
+  </section>
+
+  <section id="p2" hidden>
+    <div class="meter" aria-live="polite">
+      <div class="lbl">Last 7 days, take-home per hour</div>
+      <div class="big" id="wkHr">$0.00</div>
+      <div class="row">
+        <div><b id="wkNet">$0</b><span>net earned</span></div>
+        <div><b id="wkHrs">0</b><span>hours</span></div>
+        <div><b id="wkKm">–</b><span>cost per km</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Log a day</h2>
+      <label>Date (dd/mm/yyyy)</label>
+      <div class="g3"><select id="dd" aria-label="Day"></select><select id="dm" aria-label="Month"></select><select id="dy" aria-label="Year"></select></div>
+      <div class="grid" style="margin-top:10px">
+        <label>Hours driven<input type="number" id="h" inputmode="decimal" min="0" step="0.5"></label>
+        <label>Distance (km)<input type="number" id="k" inputmode="decimal" min="0"></label>
+      </div>
+      <div class="sec">Gross fares by platform</div>
+      <div class="grid" id="plats"></div>
+      <p class="note" id="tot">Gross is your total fares per app, including cash trips the app records. Use Other for Ryde or jobs outside apps. Check fee rates in your driver apps.</p>
+      <div class="sec">Costs</div>
+      <div class="grid">
+        <label>Rental or car cost ($)<input type="number" id="r" inputmode="decimal" min="0" step="any"></label>
+        <label>Fuel or charging ($)<input type="number" id="f" inputmode="decimal" min="0" step="any"></label>
+        <label>ERP and parking ($)<input type="number" id="e" inputmode="decimal" min="0" step="any"></label>
+        <label>Other costs ($)<input type="number" id="o" inputmode="decimal" min="0" step="any"></label>
+      </div>
+      <button class="btn" id="save">Save this day</button>
+      <p class="note" id="msg"></p>
+    </div>
+
+    <div class="card">
+      <h2>Recent days</h2>
+      <div id="list"><p class="empty">No days saved yet. Log your first day above.</p></div>
+      <p class="note">Your entries stay on this phone. Clearing your browser data removes them.</p>
+    </div>
   </section>
 
   <div class="card" style="margin-top:18px">
@@ -123,6 +133,7 @@ input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(-
     <a class="btn" id="join" hidden style="display:block;text-align:center;text-decoration:none" target="_blank" rel="noopener">Join the PHV AI community on WhatsApp</a>
     <a class="btn ghost" style="display:block;text-align:center;text-decoration:none" href="https://www.tiktok.com/@shafiq.phv" target="_blank" rel="noopener">Follow @shafiq.phv on TikTok</a>
     <a class="btn ghost" style="display:block;text-align:center;text-decoration:none" href="https://www.tiktok.com/@joelng.ai" target="_blank" rel="noopener">Follow @joelng.ai on TikTok</a>
+    <p class="note">If a TikTok link doesn’t open, search @shafiq.phv or @joelng.ai in the TikTok app.</p>
     <button class="btn ghost" id="share">Share with a driver friend</button>
   </div>
 </main>
@@ -130,65 +141,94 @@ input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(-
 <script>
 (function(){
   var $=function(i){return document.getElementById(i)};
-  var KEY="phv-days-v1", days=[];
+  var KEY="phv-days-v1",FK="phv-fees-v1",days=[];
+  var PL=[["Grab",20],["Gojek",10],["TADA",0],["CDG Zig",0],["Other (Ryde etc.)",0]];
   try{days=JSON.parse(localStorage.getItem(KEY)||"[]");if(!Array.isArray(days))days=[]}catch(e){days=[]}
+  try{var sf=JSON.parse(localStorage.getItem(FK)||"[]");if(Array.isArray(sf))sf.forEach(function(v,i){if(PL[i]&&isFinite(v))PL[i][1]=v})}catch(e){}
   function persist(){try{localStorage.setItem(KEY,JSON.stringify(days))}catch(e){}}
   function n(id){var v=parseFloat($(id).value);return isFinite(v)&&v>0?v:0}
-  function money(x,d){var s=Math.abs(x).toFixed(d==null?2:d);return(x<0?"-$":"$")+s}
+  function money(x,d){return(x<0?"-$":"$")+Math.abs(x).toFixed(d==null?2:d)}
   function cost(x){return x.r+x.f+x.e+x.o+(x.pf||0)}
-  function today(){var t=new Date();return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0")}
-  $("d").value=today();
+  function p2(v){return String(v).padStart(2,"0")}
+  function iso(t){return t.getFullYear()+"-"+p2(t.getMonth()+1)+"-"+p2(t.getDate())}
+  function today(){return iso(new Date())}
+  function fmt(s){var a=String(s).split("-");return a.length===3?a[2]+"/"+a[1]+"/"+a[0]:s}
+
+  var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],Y=new Date().getFullYear();
+  function opts(el,list){list.forEach(function(v){var o=document.createElement("option");o.value=v[0];o.textContent=v[1];el.appendChild(o)})}
+  var dl=[],ml=[],yl=[],i;
+  for(i=1;i<=31;i++)dl.push([i,p2(i)]);
+  for(i=0;i<12;i++)ml.push([i+1,p2(i+1)+" "+M[i]]);
+  for(i=Y-1;i<=Y+1;i++)yl.push([i,i]);
+  opts($("dd"),dl);opts($("dm"),ml);opts($("dy"),yl);
+  function setDate(s){var a=s.split("-");$("dy").value=a[0];$("dm").value=+a[1];$("dd").value=+a[2]}
+  function getDate(){return $("dy").value+"-"+p2($("dm").value)+"-"+p2($("dd").value)}
+  setDate(today());
+
+  var P=$("plats");
+  PL.forEach(function(p,i){
+    P.insertAdjacentHTML("beforeend",'<label>'+p[0]+' gross ($)<input type="number" id="g'+i+'" inputmode="decimal" min="0" step="any"></label><label>'+p[0]+' fee (%)<input type="number" id="p'+i+'" inputmode="decimal" min="0" max="100" value="'+p[1]+'"></label>');
+  });
+  function totals(){var g=0,f=0;PL.forEach(function(p,i){var a=n("g"+i),b=Math.min(n("p"+i),100);g+=a;f+=a*b/100});return{g:g,f:f}}
+  function showTot(){var t=totals();$("tot").textContent=t.g?"Total gross "+money(t.g)+", platform fees "+money(t.f)+", after fees "+money(t.g-t.f)+".":"Gross is your total fares per app, including cash trips the app records. Use Other for Ryde or jobs outside apps. Check fee rates in your driver apps."}
+  P.addEventListener("input",showTot);
 
   function render(){
     days.sort(function(a,b){return a.d<b.d?1:-1});
-    var cutoff=new Date();cutoff.setDate(cutoff.getDate()-6);
-    var cs=cutoff.getFullYear()+"-"+String(cutoff.getMonth()+1).padStart(2,"0")+"-"+String(cutoff.getDate()).padStart(2,"0");
+    var c=new Date();c.setDate(c.getDate()-6);var cs=iso(c);
     var w=days.filter(function(x){return x.d>=cs&&x.d<=today()});
-    var net=0,hrs=0,km=0,c=0;
-    w.forEach(function(x){net+=x.g-cost(x);hrs+=x.h;km+=x.k;c+=cost(x)});
+    var net=0,hrs=0,km=0,cst=0;
+    w.forEach(function(x){net+=x.g-cost(x);hrs+=x.h;km+=x.k;cst+=cost(x)});
     $("wkHr").textContent=hrs?money(net/hrs):"$0.00";
     $("wkNet").textContent=money(net,0);
     $("wkHrs").textContent=hrs.toFixed(hrs%1?1:0);
-    $("wkKm").textContent=km?money(c/km):"–";
+    $("wkKm").textContent=km?money(cst/km):"–";
     var L=$("list");
     if(!days.length){L.innerHTML='<p class="empty">No days saved yet. Log your first day above.</p>';return}
     L.innerHTML="";
     days.slice(0,14).forEach(function(x){
       var nt=x.g-cost(x),row=document.createElement("div");row.className="entry";
-      var left=document.createElement("div");
-      left.innerHTML="<strong></strong><small></small>";
-      left.firstChild.textContent=x.d;
+      var left=document.createElement("div");left.innerHTML="<strong></strong><small></small>";
+      left.firstChild.textContent=fmt(x.d);
       left.lastChild.textContent=x.h?money(nt/x.h)+"/hr over "+x.h+" h":"Hours not entered";
       var right=document.createElement("div");right.style.display="flex";right.style.alignItems="center";
       var amt=document.createElement("span");amt.className=nt>=0?"pos":"neg";amt.textContent=money(nt);
-      var del=document.createElement("button");del.className="del";del.type="button";del.setAttribute("aria-label","Delete "+x.d);del.textContent="×";
+      var del=document.createElement("button");del.className="del";del.type="button";del.setAttribute("aria-label","Delete "+fmt(x.d));del.textContent="×";
       del.onclick=function(){days=days.filter(function(y){return y.id!==x.id});persist();render()};
       right.appendChild(amt);right.appendChild(del);row.appendChild(left);row.appendChild(right);L.appendChild(row);
     });
   }
 
   $("save").onclick=function(){
-    var g=n("g"),h=n("h");
-    if(!g||!h){$("msg").textContent="Enter your gross earnings and hours driven to save.";return}
-    days.push({id:Date.now(),d:$("d").value||today(),g:g,h:h,k:n("k"),r:n("r"),f:n("f"),e:n("e"),o:n("o"),pf:n("pf")});
+    var t=totals(),h=n("h");
+    if(!t.g||!h){$("msg").textContent="Enter your gross fares and hours driven to save.";return}
+    days.push({id:Date.now(),d:getDate(),g:t.g,h:h,k:n("k"),r:n("r"),f:n("f"),e:n("e"),o:n("o"),pf:t.f});
     persist();
-    ["g","h","k","f","e","o","pf"].forEach(function(i){$(i).value=""});
-    $("msg").textContent="Saved. Rental stays filled in for your next day.";
+    try{localStorage.setItem(FK,JSON.stringify(PL.map(function(p,i){return Math.min(n("p"+i),100)})))}catch(e){}
+    PL.forEach(function(p,i){$("g"+i).value=""});
+    ["h","k","f","e","o"].forEach(function(i){$(i).value=""});
+    showTot();$("msg").textContent="Saved. Your rental and fee % stay filled in for your next day.";
     render();
   };
 
   function calc(){
-    var r=n("cr"),g=n("cg"),h=n("ch")||1,f=n("cf"),o=n("co"),dd=n("cd"),t=n("ct"),cc=Math.min(n("cc"),99)/100;
-    var day=g*(1-cc)-r-f-o,hr=day/h,be=(r+f+o+t*h)/(1-cc);
+    var r=n("cr"),g=n("cg"),h=n("ch")||1,f=n("cf"),o=n("co"),dd=n("cd"),t=n("ct"),td=n("ctd"),cc=Math.min(n("cc"),99)/100;
+    var day=g*(1-cc)-r-f-o,hr=day/h,be=(r+f+o+Math.max(t*h,td))/(1-cc);
     $("cHr").textContent=money(hr);
     $("cDay").textContent=money(day,0);
     $("cWk").textContent=money(day*dd,0);
     $("cBe").textContent=money(be,0);
-    var v=$("verdict");
-    if(hr>=t&&t>0){v.textContent="At these numbers you meet your target of "+money(t,0)+"/hr."}
-    else{v.textContent="You’re "+money(Math.max(t-hr,0))+"/hr short of your target. You’d need about "+money(be-g,0)+" more gross per day, or lower costs."}
+    var okH=hr>=t,okD=day>=td,v=$("verdict");
+    if(okH&&okD)v.textContent="At these numbers you meet both targets: "+money(t,0)+"/hr and "+money(td,0)+" per day.";
+    else v.textContent=(okH?"You meet your hourly target. ":"You’re "+money(t-hr)+"/hr short of your hourly target. ")+(okD?"You meet your daily target.":"You’re "+money(td-day,0)+" short of your daily target.")+" You’d need about "+money(Math.max(be-g,0),0)+" more gross per day, or lower costs.";
   }
-  ["cr","cg","ch","cf","co","cd","ct","cc"].forEach(function(i){$(i).addEventListener("input",calc)});
+  ["cr","cg","ch","cf","co","cd","ct","ctd","cc"].forEach(function(i){$(i).addEventListener("input",calc)});
+  $("csave").onclick=function(){
+    var g=n("cg"),h=n("ch"),cc=Math.min(n("cc"),99)/100;
+    if(!g||!h){$("cmsg").textContent="Enter gross fares and hours to save.";return}
+    days.push({id:Date.now(),d:today(),g:g,h:h,k:0,r:n("cr"),f:n("cf"),e:0,o:n("co"),pf:g*cc});
+    persist();render();$("cmsg").textContent="Saved to My days with today’s date."
+  };
 
   function tab(a){
     $("p1").hidden=a!==1;$("p2").hidden=a!==2;
@@ -197,13 +237,13 @@ input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(-
   $("t1").onclick=function(){tab(1)};$("t2").onclick=function(){tab(2)};
 
   $("share").onclick=function(){
-    var data={title:"PHV Take-Home Tracker",text:"Free tool to see what you really take home after rental and fuel, by @shafiq.phv",url:location.href};
+    var data={title:"PHV Take-Home Tracker",text:"Free tool to see what you really take home after rental, fuel and fees, by @shafiq.phv",url:location.href};
     if(navigator.share){navigator.share(data).catch(function(){})}
     else{try{navigator.clipboard.writeText(location.href);$("share").textContent="Link copied"}catch(e){}}
   };
 
   var JOIN_URL="https://chat.whatsapp.com/HtNkeVniXX9Cu1RyUlXjbT";
-  if(JOIN_URL){$("join").href=JOIN_URL;$("join").hidden=false}
+  if(JOIN_URL){$("join").href=JOIN_URL;$("join").hidden=false;$("tj").href=JOIN_URL;$("tj").hidden=false}
   render();calc();
 })();
 </script>
