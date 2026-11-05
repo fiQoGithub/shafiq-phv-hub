@@ -59,3 +59,12 @@ VERSION 0.6 — ECOSYSTEM DIRECTION
 - Content creation is one pathway for drivers, not a requirement for community participation.
 - Future partnerships are positioned as a later development, with transparency and voluntary participation.
 - The GitHub repository name can be changed separately to better reflect the wider hub.
+
+
+VERSION 0.7 — DARK THEME & CREATOR SHOWCASE
+- Standardised pages to a dark navy background, navy cards, light text and amber accents.
+- Added content-creators.html as a separate PHV creator showcase page.
+- Homepage PHV Content Creation card now links to the new showcase.
+- Creator page links to Shafiq (@shafiq.phv) and Joel Ng (@joelng.ai).
+- Profile portraits are neutral initials placeholders; replace with approved TikTok profile screenshots/images when supplied.
+- Six HTML pages are now required in the repository root, including content-creators.html.
