@@ -48,3 +48,14 @@ RELEASE LIMITATIONS
 - No cloud account, sync or central database.
 - Google Form integration is pending user setup.
 - This release has not been tested on every physical device/browser.
+
+
+VERSION 0.6 — ECOSYSTEM DIRECTION
+- Homepage now leads with the Knowledge & Learning Hub.
+- PHV Tracker and EV & Vehicle Cost Calculator remain available as practical tools.
+- Knowledge Centre now covers six pillars: PHV Driver Essentials, AI Learning & Adoption,
+  PHV Content Creator Pathway, Vehicle & Technology Intelligence, Community Knowledge & Projects,
+  and Opportunities & Collaboration.
+- Content creation is one pathway for drivers, not a requirement for community participation.
+- Future partnerships are positioned as a later development, with transparency and voluntary participation.
+- The GitHub repository name can be changed separately to better reflect the wider hub.
