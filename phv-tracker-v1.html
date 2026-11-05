@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PHV Take-Home Tracker by Shafiq PHV</title>
+<title>PHV Tracker | Shafiq PHV — Driver Knowledge &amp; Technology Hub</title><meta name="description" content="Track PHV fares, platform fees, rental and running costs to understand your take-home earnings."><meta property="og:title" content="PHV Tracker | Shafiq PHV"><meta property="og:description" content="Track daily earnings and understand what you keep after costs.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
@@ -48,8 +48,8 @@ textarea{width:100%;margin-top:3px;padding:10px;font:500 16px Barlow,sans-serif;
 details{border-top:1px solid var(--line);padding:8px 0}summary{font-weight:600;cursor:pointer}details p,details ol{margin:6px 0;font-size:15px}
 @media(max-width:700px){main{padding:12px 12px 32px}.grid,.g3{grid-template-columns:1fr}.tabs{display:grid;grid-template-columns:1fr 1fr}.tabs button{min-height:46px;font-size:15px;padding:11px 8px}.meter .big{font-size:56px}input,select,textarea{min-height:46px;font-size:16px}.card{padding:13px}}
 </style>
-</head>
-<body>
+<style id="shafiq-shared-v04">.sp-sitebar{max-width:900px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;font:600 14px/1.3 system-ui,sans-serif}.sp-brand{font-weight:800;text-decoration:none;color:inherit;font-size:16px}.sp-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.sp-links a{display:inline-block;padding:9px 12px;border:1px solid var(--line,#d5dde7);border-radius:9px;text-decoration:none;color:inherit;font-size:13px;font-weight:700}.sp-links a.sp-primary{background:#f4b323;color:#172536;border-color:#f4b323}.sp-sitefooter{max-width:900px;margin:26px auto 0;padding:18px 16px 28px;border-top:1px solid var(--line,#d5dde7);text-align:center;font:13px/1.6 system-ui,sans-serif;color:var(--muted,#5b6878)}.sp-sitefooter a{color:inherit;font-weight:700}.sp-sitefooter .sp-footlinks{display:flex;justify-content:center;gap:8px 16px;flex-wrap:wrap;margin-bottom:8px}.sp-sitefooter .sp-credit{margin-top:8px}@media(max-width:600px){.sp-sitebar{align-items:flex-start;flex-direction:column;padding:12px}.sp-links{width:100%}.sp-links a{flex:1;text-align:center}.sp-sitefooter{padding-left:12px;padding-right:12px}}</style></head>
+<body><nav class="sp-sitebar" aria-label="Main navigation"><a class="sp-brand" href="index.html">Shafiq PHV <span style="font-weight:500;color:var(--muted,#5b6878)">· Driver Knowledge &amp; Technology Hub</span></a><div class="sp-links"><a href="index.html">Home</a><a class="sp-primary" href="https://chat.whatsapp.com/HtNkeVniXX9Cu1RyUlXjbT" target="_blank" rel="noopener">Join community</a><a href="https://www.tiktok.com/@shafiq.phv" target="_blank" rel="noopener">Follow TikTok</a></div></nav>
 <main>
   <h1>PHV Take-Home Tracker</h1>
   <p class="sub">Find out what you really keep after rental, fuel, fees and costs. Free tool built for the PHV (AI Adoption) community by <a href="https://www.tiktok.com/@shafiq.phv" target="_blank" rel="noopener" style="color:inherit;font-weight:600">Shafiq (@shafiq.phv)</a>.</p>
@@ -128,7 +128,7 @@ details{border-top:1px solid var(--line);padding:8px 0}summary{font-weight:600;c
     <div class="card">
       <h2>Recent days</h2>
       <div id="list"><p class="empty">No days saved yet. Log your first day above.</p></div>
-      <p class="note">Your entries stay on this phone. Clearing your browser data removes them. Export a backup regularly, especially before changing devices.</p><button class="btn ghost" id="exportDays">Export my days (backup)</button><label style="margin-top:10px">Restore a backup file<input type="file" id="importDays" accept="application/json,.json"></label><p class="note" id="backupMsg"></p>
+      <p class="note">Your records are saved only in this browser on this device — they are not stored in an online account. Download a backup regularly and keep the file somewhere safe. If you change phones, browsers or clear browser data, select your saved backup file to restore your records. The backup is a data file; you do not need to open or edit it. Restoring replaces the records currently saved in this browser.</p><button class="btn ghost" id="exportDays">Download my backup file</button><label style="margin-top:10px">Restore from a backup file<input type="file" id="importDays" accept="application/json,.json"></label><p class="note" id="backupMsg"></p>
     </div>
   </section>
 
@@ -196,11 +196,11 @@ details{border-top:1px solid var(--line);padding:8px 0}summary{font-weight:600;c
 
   <div class="card">
     <h2>Tell Shafiq what to fix</h2>
-    <p class="empty" style="margin-bottom:10px">Confusing, missing or wrong? Your message opens in WhatsApp, ready to send to Shafiq.</p>
+    <p class="empty" style="margin-bottom:10px">Confusing, missing or wrong? WhatsApp will open with a prepared message. Review it and tap Send to contact Shafiq.</p>
     <label>What kind?<select id="fbt"><option>Something is confusing</option><option>Something is missing</option><option>A number looks wrong</option><option>Idea for a new tool</option><option>It helped me</option></select></label>
     <label style="margin-top:8px">Your message<textarea id="fbm" rows="3" placeholder="e.g. Add Zig commission"></textarea></label>
     <label style="margin-top:8px">Your name (optional)<input type="text" id="fbw"></label>
-    <button class="btn" id="fbs">Send on WhatsApp</button>
+    <button class="btn" id="fbs">Tell Shafiq</button>
     <p class="note" id="fbn">It tells Shafiq which tab you were on, so he can fix the right thing.</p>
   </div>
 
@@ -213,7 +213,7 @@ details{border-top:1px solid var(--line);padding:8px 0}summary{font-weight:600;c
     <p class="note">If a TikTok link doesn’t open, search @shafiq.phv or @joelng.ai in the TikTok app.</p>
     <button class="btn ghost" id="share">Share with a driver friend</button>
   </div>
-<footer style="text-align:center;color:var(--muted);font-size:14px;margin-top:8px">Built by Shafiq <a href="https://www.tiktok.com/@shafiq.phv" target="_blank" rel="noopener" style="color:inherit;font-weight:600">@shafiq.phv</a>,<br>from the PHV AI community — Joel Ng <a href="https://www.tiktok.com/@joelng.ai" target="_blank" rel="noopener" style="color:inherit;font-weight:600">@joelng.ai</a>.</footer>
+
 </main>
 
 <script>
@@ -345,5 +345,5 @@ details{border-top:1px solid var(--line);padding:8px 0}summary{font-weight:600;c
   render();calc();ev();
 })();
 </script>
-</body>
+<footer class="sp-sitefooter"><div class="sp-footlinks"><a href="index.html">Home</a><a href="knowledge-centre.html">Knowledge Centre</a><a href="https://chat.whatsapp.com/HtNkeVniXX9Cu1RyUlXjbT" target="_blank" rel="noopener">Join WhatsApp community</a><a href="https://www.tiktok.com/@shafiq.phv" target="_blank" rel="noopener">Follow @shafiq.phv</a></div><div class="sp-credit">Built by Shafiq <a href="https://www.tiktok.com/@shafiq.phv" target="_blank" rel="noopener">@shafiq.phv</a>, from the PHV AI community — Joel Ng <a href="https://www.tiktok.com/@joelng.ai" target="_blank" rel="noopener">@joelng.ai</a>.</div><div>Shafiq PHV — Driver Knowledge &amp; Technology Hub · Version 0.4</div></footer></body>
 </html>
