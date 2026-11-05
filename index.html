@@ -55,6 +55,7 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
   <div class="tabs" role="tablist">
     <button role="tab" id="t1" aria-selected="true">Day check</button>
     <button role="tab" id="t2" aria-selected="false">My days</button>
+    <button role="tab" id="t3" aria-selected="false">EV vs Petrol</button>
   </div>
 
   <section id="p1">
@@ -125,6 +126,47 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
       <div id="list"><p class="empty">No days saved yet. Log your first day above.</p></div>
       <p class="note">Your entries stay on this phone. Clearing your browser data removes them.</p>
     </div>
+  </section>
+
+  <section id="p3" hidden>
+    <div class="card">
+      <h2>EV vs petrol: what do you really save?</h2>
+      <p class="empty" style="margin-bottom:10px">The numbers below are examples. Replace them with your own prices and car figures.</p>
+      <div class="grid">
+        <label>Km per day<input type="number" id="ek" inputmode="decimal" min="0" step="any" value="200"></label>
+        <label>Days per month<input type="number" id="ed" inputmode="decimal" min="1" max="31" step="any" value="26"></label>
+      </div>
+      <div class="sec">Petrol car</div>
+      <div class="grid">
+        <label>Petrol price ($ per litre)<input type="number" id="ep" inputmode="decimal" min="0" step="any" value="3"></label>
+        <label>Km per litre<input type="number" id="eq" inputmode="decimal" min="0" step="any" value="14"></label>
+        <label>Minutes lost refuelling per day<input type="number" id="em" inputmode="decimal" min="0" step="any" value="5"></label>
+      </div>
+      <div class="sec">Electric car</div>
+      <div class="grid">
+        <label>Home charging ($ per kWh)<input type="number" id="eh" inputmode="decimal" min="0" step="any" value="0.3"></label>
+        <label>Public charging ($ per kWh)<input type="number" id="eu" inputmode="decimal" min="0" step="any" value="0.6"></label>
+        <label>Share charged in public (%)<input type="number" id="es" inputmode="decimal" min="0" max="100" step="any" value="70"></label>
+        <label>kWh per 100 km<input type="number" id="ec" inputmode="decimal" min="0" step="any" value="15"></label>
+        <label>Minutes lost charging per day<input type="number" id="ee" inputmode="decimal" min="0" step="any" value="30"></label>
+        <label>Your take-home per hour ($)<input type="number" id="er" inputmode="decimal" min="0" step="any" value="15"></label>
+      </div>
+    </div>
+    <div class="meter" aria-live="polite">
+      <div class="lbl">Energy saving per month with an EV</div>
+      <div class="big" id="eS">$0</div>
+      <div class="row">
+        <div><b id="eP">$0</b><span>petrol per month</span></div>
+        <div><b id="eE">$0</b><span>EV per month</span></div>
+        <div><b id="eN">$0</b><span>saving after time lost</span></div>
+      </div>
+      <div class="row">
+        <div><b id="eKp">$0.00</b><span>petrol per km</span></div>
+        <div><b id="eKe">$0.00</b><span>EV per km</span></div>
+      </div>
+    </div>
+    <p class="verdict" id="everdict"></p>
+    <p class="note">Energy only. It leaves out the car price, rental, insurance and maintenance. Time lost is charged at your take-home per hour, since time spent charging is time not earning.</p>
   </section>
 
   <div class="card" style="margin-top:18px">
@@ -232,10 +274,10 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
   };
 
   function tab(a){
-    $("p1").hidden=a!==1;$("p2").hidden=a!==2;
-    $("t1").setAttribute("aria-selected",a===1);$("t2").setAttribute("aria-selected",a===2);
+    $("p1").hidden=a!==1;$("p2").hidden=a!==2;$("p3").hidden=a!==3;
+    $("t1").setAttribute("aria-selected",a===1);$("t2").setAttribute("aria-selected",a===2);$("t3").setAttribute("aria-selected",a===3);
   }
-  $("t1").onclick=function(){tab(1)};$("t2").onclick=function(){tab(2)};
+  $("t1").onclick=function(){tab(1)};$("t2").onclick=function(){tab(2)};$("t3").onclick=function(){tab(3)};
 
   $("share").onclick=function(){
     var data={title:"PHV Take-Home Tracker",text:"Free tool to see what you really take home after rental, fuel and fees, by @shafiq.phv",url:location.href};
@@ -243,9 +285,18 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
     else{try{navigator.clipboard.writeText(location.href);$("share").textContent="Link copied"}catch(e){}}
   };
 
+  function ev(){
+    var km=n("ek"),dm=n("ed")||1,pp=n("ep"),pk=n("eq")||1,eh=n("eh"),eu=n("eu"),es=Math.min(n("es"),100)/100,ec=n("ec"),mp=n("em"),me=n("ee"),rt=n("er");
+    var pd=km/pk*pp,ed=km*ec/100*(eh*(1-es)+eu*es),tp=mp/60*rt,te=me/60*rt;
+    var S=(pd-ed)*dm,N=(pd+tp-ed-te)*dm;
+    $("eS").textContent=money(S,0);$("eP").textContent=money(pd*dm,0);$("eE").textContent=money(ed*dm,0);$("eN").textContent=money(N,0);
+    $("eKp").textContent=km?money(pd/km):"$0.00";$("eKe").textContent=km?money(ed/km):"$0.00";
+    $("everdict").textContent=N>0?"Even after counting time lost, the EV comes out about "+money(N,0)+" cheaper per month.":"After counting time lost, petrol comes out about "+money(-N,0)+" cheaper per month. Try a lower public share or less charging time.";
+  }
+  ["ek","ed","ep","eq","em","eh","eu","es","ec","ee","er"].forEach(function(i){$(i).addEventListener("input",ev)});
   var JOIN_URL="https://chat.whatsapp.com/HtNkeVniXX9Cu1RyUlXjbT";
   if(JOIN_URL){$("join").href=JOIN_URL;$("join").hidden=false;$("tj").href=JOIN_URL;$("tj").hidden=false}
-  render();calc();
+  render();calc();ev();
 })();
 </script>
 </body>
