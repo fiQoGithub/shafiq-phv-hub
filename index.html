@@ -17,7 +17,7 @@ main{max-width:560px;margin:0 auto;padding:16px 16px 40px}
 h1{font:700 28px/1.1 "Barlow Condensed","Arial Narrow",sans-serif;margin:4px 0 2px}
 .sub{color:var(--muted);margin:0 0 14px;font-size:15px}
 .tabs{display:flex;gap:6px;margin-bottom:14px}
-.tabs button{flex:1;padding:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 15px Barlow,sans-serif;border-radius:8px;cursor:pointer}
+.tabs button{flex:1;padding:10px 2px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13.5px Barlow,sans-serif;border-radius:8px;cursor:pointer}
 .tabs button[aria-selected="true"]{background:var(--amber);border-color:var(--amber);color:var(--amber-ink)}
 .meter{background:var(--meter);color:var(--meter-ink);border-radius:12px;padding:16px 18px;margin-bottom:14px}
 .meter .big{font:700 64px/1 "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.5px}
@@ -44,6 +44,8 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
 .verdict{font-weight:600;margin:8px 0 0}
 .sec{font:600 14px Barlow,sans-serif;color:var(--muted);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.04em}
 [hidden]{display:none!important}
+textarea{width:100%;margin-top:3px;padding:10px;font:500 16px Barlow,sans-serif;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);resize:vertical}
+details{border-top:1px solid var(--line);padding:8px 0}summary{font-weight:600;cursor:pointer}details p,details ol{margin:6px 0;font-size:15px}
 </style>
 </head>
 <body>
@@ -56,6 +58,7 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
     <button role="tab" id="t1" aria-selected="true">Day check</button>
     <button role="tab" id="t2" aria-selected="false">My days</button>
     <button role="tab" id="t3" aria-selected="false">EV vs Petrol</button>
+    <button role="tab" id="t4" aria-selected="false">Guide</button>
   </div>
 
   <section id="p1">
@@ -130,35 +133,38 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
 
   <section id="p3" hidden>
     <div class="card">
-      <h2>EV vs petrol: what do you really save?</h2>
+      <h2>Petrol, hybrid or EV rental: which leaves you more?</h2>
       <p class="empty" style="margin-bottom:10px">The numbers below are examples. Replace them with your own prices and car figures.</p>
       <div class="grid">
         <label>Km per day<input type="number" id="ek" inputmode="decimal" min="0" step="any" value="200"></label>
         <label>Days per month<input type="number" id="ed" inputmode="decimal" min="1" max="31" step="any" value="26"></label>
       </div>
-      <div class="sec">Petrol car</div>
+      <div class="sec">Petrol or hybrid car</div>
       <div class="grid">
         <label>Petrol price ($ per litre)<input type="number" id="ep" inputmode="decimal" min="0" step="any" value="3"></label>
-        <label>Km per litre<input type="number" id="eq" inputmode="decimal" min="0" step="any" value="14"></label>
+        <label>Km per litre (hybrid: use a higher number)<input type="number" id="eq" inputmode="decimal" min="0" step="any" value="14"></label>
         <label>Minutes lost refuelling per day<input type="number" id="em" inputmode="decimal" min="0" step="any" value="5"></label>
+        <label>Petrol or hybrid rental per day ($)<input type="number" id="rp" inputmode="decimal" min="0" step="any" value="90"></label>
       </div>
       <div class="sec">Electric car</div>
       <div class="grid">
-        <label>Home charging ($ per kWh)<input type="number" id="eh" inputmode="decimal" min="0" step="any" value="0.3"></label>
-        <label>Public charging ($ per kWh)<input type="number" id="eu" inputmode="decimal" min="0" step="any" value="0.6"></label>
+        <label>Home charging ($ per kWh)<input type="number" id="eh" inputmode="decimal" min="0" step="any" value="0.35"></label>
+        <label>Public charging ($ per kWh)<input type="number" id="eu" inputmode="decimal" min="0" step="any" value="0.65"></label>
         <label>Share charged in public (%)<input type="number" id="es" inputmode="decimal" min="0" max="100" step="any" value="70"></label>
         <label>kWh per 100 km<input type="number" id="ec" inputmode="decimal" min="0" step="any" value="15"></label>
         <label>Minutes lost charging per day<input type="number" id="ee" inputmode="decimal" min="0" step="any" value="30"></label>
         <label>Your take-home per hour ($)<input type="number" id="er" inputmode="decimal" min="0" step="any" value="15"></label>
+        <label>EV rental per day ($)<input type="number" id="rv" inputmode="decimal" min="0" step="any" value="100"></label>
+        <label>Charging discount (%)<input type="number" id="ex" inputmode="decimal" min="0" max="100" step="any" value="0"></label>
       </div>
     </div>
     <div class="meter" aria-live="polite">
-      <div class="lbl">Energy saving per month with an EV</div>
+      <div class="lbl">Your real saving per month with the EV</div>
       <div class="big" id="eS">$0</div>
       <div class="row">
         <div><b id="eP">$0</b><span>petrol per month</span></div>
         <div><b id="eE">$0</b><span>EV per month</span></div>
-        <div><b id="eN">$0</b><span>saving after time lost</span></div>
+        <div><b id="eN">$0</b><span>energy saving only</span></div>
       </div>
       <div class="row">
         <div><b id="eKp">$0.00</b><span>petrol per km</span></div>
@@ -166,8 +172,36 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
       </div>
     </div>
     <p class="verdict" id="everdict"></p>
-    <p class="note">Energy only. It leaves out the car price, rental, insurance and maintenance. Time lost is charged at your take-home per hour, since time spent charging is time not earning.</p>
+    <p class="note">Counts energy, rental and the time you lose charging, at your take-home per hour. Leaves out insurance, maintenance and the car itself. Starting numbers are examples, so use your own prices and rental quotes. A negative number means the petrol or hybrid car leaves you more.</p>
   </section>
+
+  <section id="p4" hidden>
+    <div class="card">
+      <h2>How to use this tool</h2>
+      <p class="empty">Made for PHV drivers. Everything stays on your phone.</p>
+      <details open><summary>Day check: is this rental or day worth it?</summary>
+        <ol><li>Enter the rental, your usual gross fares, hours, fuel and other costs.</li><li>Add the platform commission % and your targets per hour and per day.</li><li>Read your take-home per hour, and the gross you need each day to hit both targets.</li></ol>
+        <p>Tip: change the rental or fuel to compare two options before you sign.</p></details>
+      <details><summary>My days: log what you really keep</summary>
+        <ol><li>Pick the date and enter hours and km.</li><li>Type your gross fares for each app you drove. Fee % is remembered after your first save.</li><li>Add rental, fuel or charging, ERP and parking, and other costs, then save.</li></ol>
+        <p>Gross means total fares per app, including cash trips the app records. Use Other for Ryde or jobs outside the apps. The top meter shows your last 7 days.</p></details>
+      <details><summary>EV vs Petrol: which rental leaves you more?</summary>
+        <ol><li>Enter your daily km and days per month.</li><li>Fill in the petrol or hybrid car: fuel price, km per litre (a hybrid goes further on a litre, so use a higher number) and its daily rental.</li><li>Fill in the EV: charging prices, kWh per 100 km, how much you charge in public, any charging discount and its daily rental.</li></ol>
+        <p>The big number counts energy, rental and the time you lose charging. Use real prices from your charger app and rental quote, since the starting numbers are only examples.</p></details>
+      <details><summary>Words used here</summary>
+        <p><b>Gross:</b> total fares before fees. <b>Fee or commission:</b> the % the app takes. <b>Take-home:</b> what you keep after the fee and all costs. <b>ERP:</b> road charges.</p></details>
+    </div>
+  </section>
+
+  <div class="card">
+    <h2>Tell Shafiq what to fix</h2>
+    <p class="empty" style="margin-bottom:10px">Confusing, missing or wrong? Your message opens in WhatsApp, ready to send to Shafiq.</p>
+    <label>What kind?<select id="fbt"><option>Something is confusing</option><option>Something is missing</option><option>A number looks wrong</option><option>Idea for a new tool</option><option>It helped me</option></select></label>
+    <label style="margin-top:8px">Your message<textarea id="fbm" rows="3" placeholder="e.g. Add Zig commission"></textarea></label>
+    <label style="margin-top:8px">Your name (optional)<input type="text" id="fbw"></label>
+    <button class="btn" id="fbs">Send on WhatsApp</button>
+    <p class="note" id="fbn">It tells Shafiq which tab you were on, so he can fix the right thing.</p>
+  </div>
 
   <div class="card" style="margin-top:18px">
     <h2>Join the PHV AI community</h2>
@@ -210,9 +244,9 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
 
   var P=$("plats");
   PL.forEach(function(p,i){
-    P.insertAdjacentHTML("beforeend",'<label>'+p[0]+' gross ($)<input type="number" id="g'+i+'" inputmode="decimal" min="0" step="any"></label><label>'+p[0]+' fee (%)<input type="number" id="p'+i+'" inputmode="decimal" min="0" max="100" value="'+p[1]+'"></label>');
+    P.insertAdjacentHTML("beforeend",'<label>'+p[0]+' gross ($)<input type="number" id="g'+i+'" inputmode="decimal" min="0" step="any"></label><label>'+p[0]+' fee (%)<input type="number" id="fp'+i+'" inputmode="decimal" min="0" max="100" value="'+p[1]+'"></label>');
   });
-  function totals(){var g=0,f=0;PL.forEach(function(p,i){var a=n("g"+i),b=Math.min(n("p"+i),100);g+=a;f+=a*b/100});return{g:g,f:f}}
+  function totals(){var g=0,f=0;PL.forEach(function(p,i){var a=n("g"+i),b=Math.min(n("fp"+i),100);g+=a;f+=a*b/100});return{g:g,f:f}}
   function showTot(){var t=totals();$("tot").textContent=t.g?"Total gross "+money(t.g)+", platform fees "+money(t.f)+", after fees "+money(t.g-t.f)+".":"Gross is your total fares per app, including cash trips the app records. Use Other for Ryde or jobs outside apps. Check fee rates in your driver apps."}
   P.addEventListener("input",showTot);
 
@@ -247,7 +281,7 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
     if(!t.g||!h){$("msg").textContent="Enter your gross fares and hours driven to save.";return}
     days.push({id:Date.now(),d:getDate(),g:t.g,h:h,k:n("k"),r:n("r"),f:n("f"),e:n("e"),o:n("o"),pf:t.f});
     persist();
-    try{localStorage.setItem(FK,JSON.stringify(PL.map(function(p,i){return Math.min(n("p"+i),100)})))}catch(e){}
+    try{localStorage.setItem(FK,JSON.stringify(PL.map(function(p,i){return Math.min(n("fp"+i),100)})))}catch(e){}
     PL.forEach(function(p,i){$("g"+i).value=""});
     ["h","k","f","e","o"].forEach(function(i){$(i).value=""});
     showTot();$("msg").textContent="Saved. Your rental and fee % stay filled in for your next day.";
@@ -274,10 +308,10 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
   };
 
   function tab(a){
-    $("p1").hidden=a!==1;$("p2").hidden=a!==2;$("p3").hidden=a!==3;
-    $("t1").setAttribute("aria-selected",a===1);$("t2").setAttribute("aria-selected",a===2);$("t3").setAttribute("aria-selected",a===3);
+    $("p1").hidden=a!==1;$("p2").hidden=a!==2;$("p3").hidden=a!==3;$("p4").hidden=a!==4;curTab=["","Day check","My days","EV vs Petrol","Guide"][a];
+    $("t1").setAttribute("aria-selected",a===1);$("t2").setAttribute("aria-selected",a===2);$("t3").setAttribute("aria-selected",a===3);$("t4").setAttribute("aria-selected",a===4);
   }
-  $("t1").onclick=function(){tab(1)};$("t2").onclick=function(){tab(2)};$("t3").onclick=function(){tab(3)};
+  $("t1").onclick=function(){tab(1)};$("t2").onclick=function(){tab(2)};$("t3").onclick=function(){tab(3)};$("t4").onclick=function(){tab(4)};
 
   $("share").onclick=function(){
     var data={title:"PHV Take-Home Tracker",text:"Free tool to see what you really take home after rental, fuel and fees, by @shafiq.phv",url:location.href};
@@ -287,13 +321,21 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
 
   function ev(){
     var km=n("ek"),dm=n("ed")||1,pp=n("ep"),pk=n("eq")||1,eh=n("eh"),eu=n("eu"),es=Math.min(n("es"),100)/100,ec=n("ec"),mp=n("em"),me=n("ee"),rt=n("er");
-    var pd=km/pk*pp,ed=km*ec/100*(eh*(1-es)+eu*es),tp=mp/60*rt,te=me/60*rt;
-    var S=(pd-ed)*dm,N=(pd+tp-ed-te)*dm;
-    $("eS").textContent=money(S,0);$("eP").textContent=money(pd*dm,0);$("eE").textContent=money(ed*dm,0);$("eN").textContent=money(N,0);
+    var ex=Math.min(n("ex"),100)/100,rp=n("rp"),rv=n("rv"),pd=km/pk*pp,ed=km*ec/100*(eh*(1-es)+eu*(1-ex)*es),tp=mp/60*rt,te=me/60*rt;
+    var S=(pd-ed)*dm,N=(pd+tp-ed-te)*dm,R=N+(rp-rv)*dm;
+    $("eS").textContent=money(R,0);$("eP").textContent=money(pd*dm,0);$("eE").textContent=money(ed*dm,0);$("eN").textContent=money(S,0);
     $("eKp").textContent=km?money(pd/km):"$0.00";$("eKe").textContent=km?money(ed/km):"$0.00";
-    $("everdict").textContent=N>0?"Even after counting time lost, the EV comes out about "+money(N,0)+" cheaper per month.":"After counting time lost, petrol comes out about "+money(-N,0)+" cheaper per month. Try a lower public share or less charging time.";
+    $("everdict").textContent=R>0?"After rental and time lost, the EV leaves you about "+money(R,0)+" better off per month.":"After rental and time lost, the petrol or hybrid car leaves you about "+money(-R,0)+" better off per month. A cheaper EV rental or more home charging could change that.";
   }
-  ["ek","ed","ep","eq","em","eh","eu","es","ec","ee","er"].forEach(function(i){$(i).addEventListener("input",ev)});
+  ["ek","ed","ep","eq","em","eh","eu","es","ec","ee","er","rp","rv","ex"].forEach(function(i){$(i).addEventListener("input",ev)});
+  var curTab="Day check",FB_WA="6598513341";
+  $("fbs").onclick=function(){
+    var m=$("fbm").value.trim();
+    if(!m){$("fbn").textContent="Type a short message first.";return}
+    var w=$("fbw").value.trim(),t="PHV Tracker feedback ("+$("fbt").value+", "+curTab+" tab): "+m+(w?" - from "+w:"");
+    window.open("https://wa.me/"+FB_WA+"?text="+encodeURIComponent(t),"_blank");
+    $("fbn").textContent="WhatsApp opened with your message. Tap send there.";
+  };
   var JOIN_URL="https://chat.whatsapp.com/HtNkeVniXX9Cu1RyUlXjbT";
   if(JOIN_URL){$("join").href=JOIN_URL;$("join").hidden=false;$("tj").href=JOIN_URL;$("tj").hidden=false}
   render();calc();ev();
