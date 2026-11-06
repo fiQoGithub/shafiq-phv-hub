@@ -1,0 +1,44 @@
+SHAFIQ PHV — MOBILE-FIRST RELEASE CHECKLIST (v0.7.1)
+
+TEST DEVICES
+[ ] Android Chrome, normal and incognito
+[ ] iPhone Safari (ask a tester)
+[ ] Desktop Chrome or Edge
+[ ] Narrow phone width / landscape / zoom to 200%
+
+PAGE LINKS
+[ ] Home loads and all main cards open their intended pages
+[ ] Tracker opens; Day check / My days / EV vs Petrol / Guide tabs work
+[ ] Tracker test data saved and remains after refresh; JSON export works
+[ ] Tracker restore tested only with disposable test data (restore replaces data)
+[ ] EV Calculator accepts inputs and updates estimates; labels are readable
+[ ] Knowledge Centre: every Goal line is visible; navigation works
+[ ] Content Creators: Joel first on mobile; Joel right on desktop
+[ ] Both TikTok profile links open the correct accounts
+[ ] Feedback page loads; any WhatsApp links are checked on phone
+[ ] Footer, Back/Home and external links work on every page
+
+WHATSAPP TESTS
+[ ] Join Community link tapped on Android Chrome with WhatsApp installed
+[ ] Same link tested inside TikTok's in-app browser
+[ ] Same link tested on iPhone Safari with WhatsApp installed
+[ ] If download page appears, note browser and whether Open in app is offered
+[ ] Invitation link is still valid; group is owned by Joel, not Shafiq PHV
+
+VISUAL & ACCESSIBILITY
+[ ] No white sections or dark-on-dark text
+[ ] Buttons at least ~44px tall; no horizontal scrolling
+[ ] Text and controls readable outdoors and at increased font size
+[ ] Input fields usable with mobile keyboard; no accidental page zoom
+[ ] Portrait/landscape layout and footer tested
+
+DATA & PRIVACY
+[ ] Existing PHV Tracker records remain available in the same browser
+[ ] Export user data before testing restore or clearing browser storage
+[ ] Do not send personally identifiable driver records without consent
+
+REPORT ISSUE FORMAT
+Page | Device/browser | What I tapped | Expected | Actual | Screenshot
+
+NOTES
+Static source checks are not a substitute for real-device browser tests.

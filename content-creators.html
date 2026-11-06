@@ -16,12 +16,12 @@ main{max-width:950px;margin:auto;padding:18px 18px 42px}
 h1{font-size:clamp(30px,6vw,46px);line-height:1.1;margin:8px 0}h2{margin:6px 0 8px}
 p{color:var(--muted)}.profiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0}
 .profile{display:flex;flex-direction:column;gap:10px}
-.avatar{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:#263b58;color:#f5c76a;font-size:27px;font-weight:800;border:2px solid #526781}
+.avatar{object-fit:cover;width:88px;height:88px;border-radius:50%;display:grid;place-items:center;background:#263b58;color:#f5c76a;font-size:27px;font-weight:800;border:2px solid #526781}
 .handle{color:#f5c76a;font-weight:800}.button{display:inline-block;background:var(--amber);color:#101b2d;text-decoration:none;padding:11px 15px;border-radius:9px;font-weight:800;text-align:center;margin-top:auto}
 .callout{margin-top:18px}.note{font-size:13px;color:#9fb0c5}
 footer{max-width:950px;margin:0 auto;padding:18px;text-align:center;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 footer a{color:var(--ink)}
-@media(max-width:620px){main{padding:12px}.profiles{grid-template-columns:1fr}.hero,.profile,.callout{padding:18px}.button{width:100%}}
+@media(max-width:620px){.profile.joel{order:1}.profile.shafiq{order:2}main{padding:12px}.profiles{grid-template-columns:1fr}.hero,.profile,.callout{padding:18px}.button{width:100%}}
 </style></head><body>
 <nav><a href="index.html">Shafiq PHV · Driver Knowledge &amp; Technology Hub</a><div class="links">
 <a href="index.html">Home</a><a href="knowledge-centre.html">Knowledge Hub</a><a href="https://chat.whatsapp.com/HtNkeVniXX9Cu1RyUlXjbT" target="_blank" rel="noopener">Join Community</a></div></nav>
@@ -31,16 +31,16 @@ footer a{color:var(--ink)}
 <p>You already have stories, experience and knowledge worth sharing. Meet drivers who are putting their PHV journeys online — and see how you could start creating too.</p>
 </section>
 <div class="profiles">
-<article class="profile"><div class="avatar" aria-hidden="true">S</div><div><div class="eyebrow">PHV DRIVER · CONTENT CREATOR</div><h2>Shafiq</h2><div class="handle">@shafiq.phv</div></div>
-<p>Sharing PHV driving experiences, driver knowledge, technology and the journey of building a smarter PHV community.</p>
+<article class="profile shafiq"><img class="avatar" src="assets/shafiq-profile.png" alt="Shafiq TikTok profile photo" width="88" height="88"><div><div class="eyebrow">PHV DRIVER · CONTENT CREATOR</div><h2>Shafiq</h2><div class="handle">@shafiq.phv</div></div>
+<p>Founder and builder of Shafiq PHV Hub, sharing driver experiences, practical PHV tools, AI adoption and the process of building useful technology in public.</p>
 <a class="button" href="https://www.tiktok.com/@shafiq.phv" target="_blank" rel="noopener">View Shafiq on TikTok ↗</a></article>
-<article class="profile"><div class="avatar" aria-hidden="true">J</div><div><div class="eyebrow">PHV DRIVER · AI & CONTENT EDUCATOR</div><h2>Joel Ng</h2><div class="handle">@joelng.ai</div></div>
-<p>Sharing AI and TikTok content creation knowledge, and helping others explore how to develop their creator skills.</p>
+<article class="profile joel"><img class="avatar" src="assets/joel-profile.png" alt="Joel TikTok profile photo" width="88" height="88"><div><div class="eyebrow">PHV DRIVER · AI TRAINER · FEATURED CREATOR</div><h2>Joel Ng</h2><div class="handle">@joelng.ai</div></div>
+<p>Founder of the PHV AI Adoption WhatsApp group and an AI TikTok monetisation trainer at BR Academy Global. Shares Singapore transport updates, driver costs and practical creator learning.</p>
 <a class="button" href="https://www.tiktok.com/@joelng.ai" target="_blank" rel="noopener">View Joel on TikTok ↗</a></article>
 </div>
 <section class="callout"><h2>You could be the next driver creator</h2>
 <p>Start with what you know. Share a useful driving tip, a lesson from your day, a vehicle insight or a story that could help another driver. AI tools can help you brainstorm, structure a script and prepare captions — while your own experience remains the most important part.</p>
-<a class="button" href="knowledge-centre.html#creator-learning">Learn how to get started</a>
+<p class="note"><strong>Free PHV Creator Pathway is being prepared.</strong> It will start with self-help lessons, with optional courses and mentorship afterwards.</p>
 <p class="note">The profiles above are examples, not endorsements or guarantees of income. Content creation and monetisation take time, consistency and learning. Course enquiries should be made directly with the relevant educator.</p></section>
 </main>
 <footer>Shafiq PHV — Driver Knowledge &amp; Technology Hub · Built by Shafiq, from the PHV AI community — Joel Ng.</footer>
