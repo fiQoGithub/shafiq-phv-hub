@@ -1,0 +1,6 @@
+SHAFIQ PHV Hub v0.8 beta REVIEW ONLY
+Based on complete v0.7.1 archive, retaining all six original HTML pages and two image assets.
+Changes: homepage adds Fuel Optimiser beta link; fuel-optimiser.html is new.
+NOT DEPLOYED. Do not replace live files without approval.
+Fuel prices/promotions not verified. Existing prototype has only one global platform/tier selector; independent per-platform tiers and saved driver profiles are NOT YET IMPLEMENTED.
+Needs mobile/browser QA, calculation edge-case tests, and verified promo data before launch.
