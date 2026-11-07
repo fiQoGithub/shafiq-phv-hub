@@ -1,4 +1,3 @@
-# phvtracker
 # SHAFIQ PHV Hub
 
 **DRIVE. LEARN. CREATE. GROW.**
